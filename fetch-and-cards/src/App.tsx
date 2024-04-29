@@ -1,10 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Card from "./components/Card";
 
+interface CardsData {
+    firstName: string;
+    lastName: string;
+    age: number;
+    email: string;
+    image: string;
+    [key: string]: any;
+};
+
 function App() {
-  const [cardsData, setCardsData] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [cardsData, setCardsData] = useState<CardsData[] | null>([]);
+  const [loading, setLoading] = useState<Boolean>(false);
 
   let loadCats = async () => {
     setLoading(true);
@@ -14,8 +23,8 @@ function App() {
     setLoading(false);
   };
 
-  useState(async () => {
-    await loadCats();
+  useEffect(() => {
+     loadCats();
   }, []);
 
   return (
@@ -26,7 +35,7 @@ function App() {
         </h1>
         {!loading ? (
           <div className="flex flex-col gap-4 card-list">
-            {cardsData.map((card, index) => (
+            {cardsData?.map((card, index) => (
               <Card key={index} card={card} />
             ))}
           </div>
